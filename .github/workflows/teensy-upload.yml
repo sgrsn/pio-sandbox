@@ -2,6 +2,17 @@ name: Teensy Upload and Serial Monitor
 
 on:
   workflow_dispatch:
+    inputs:
+      baud_rate:
+        description: 'Serial baud rate'
+        required: true
+        default: '9600'
+        type: number
+      timeout:
+        description: 'Serial monitor timeout (seconds)'
+        required: true
+        default: 5
+        type: number
 
 jobs:
   upload:
@@ -22,5 +33,5 @@ jobs:
       
       - name: Monitor Serial Output
         run: |
-          stty -F /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00 9600
-          timeout 5s cat /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00
+          stty -F /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00 ${{ github.event.inputs.baud_rate }}
+          timeout ${{ github.event.inputs.timeout }}s cat /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00
