@@ -21,7 +21,7 @@ jobs:
   upload:
     runs-on: self-hosted
     container:
-      image: platformio/platformio-core:latest
+      image: petewall/platformio
       options: --device /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00
     steps:
       - uses: actions/checkout@v4
