@@ -1,6 +1,9 @@
 name: Teensy Upload and Serial Monitor
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       baud_rate:
