@@ -1,0 +1,40 @@
+name: Teensy Upload and Serial Monitor
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      baud_rate:
+        description: 'Serial baud rate'
+        required: true
+        default: '9600'
+        type: number
+      timeout:
+        description: 'Serial monitor timeout (seconds)'
+        required: true
+        default: 5
+        type: number
+
+jobs:
+  upload:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      
+      - name: Install PlatformIO
+        run: pip install platformio
+      
+      - name: Upload to Teensy
+        run: pio run -t upload
+      
+      - name: Monitor Serial Output
+        run: |
+          stty -F /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00 ${{ github.event.inputs.baud_rate }}
+          timeout ${{ github.event.inputs.timeout }}s cat /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00
