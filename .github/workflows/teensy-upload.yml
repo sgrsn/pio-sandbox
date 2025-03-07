@@ -16,4 +16,4 @@ jobs:
       
       - name: Monitor Serial Output
         run: |
-          timeout 5s cat /dev/ttyACM0
+          timeout 5s cat /dev/ttyACM0 || true
