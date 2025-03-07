@@ -1,21 +1,6 @@
 name: Teensy Upload and Serial Monitor
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-    inputs:
-      baud_rate:
-        description: 'Serial baud rate'
-        required: true
-        default: '9600'
-        type: number
-      timeout:
-        description: 'Serial monitor timeout (seconds)'
-        required: true
-        default: 5
-        type: number
+on: [push, workflow_dispatch]
 
 jobs:
   upload:
