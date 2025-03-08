@@ -15,4 +15,5 @@ jobs:
       
       - name: Monitor Serial Output
         run: |
+          sleep 5
           timeout 5s cat /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00 || true
