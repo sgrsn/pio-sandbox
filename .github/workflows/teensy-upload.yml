@@ -5,38 +5,12 @@ on: [push, workflow_dispatch]
 jobs:
   upload:
     runs-on: self-hosted
-    container:
-      image: petewall/platformio
-      options: --device /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00:/dev/ttyACM0 --env="DISPLAY" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw"
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Teensy udev rules
-        run: |
-          # Temporarily disable strict checking for apt repositories
-          mkdir -p /etc/apt/apt.conf.d/
-          echo 'Acquire::AllowInsecureRepositories "true";' > /etc/apt/apt.conf.d/99allow-insecure
-          echo 'Acquire::AllowDowngradeToInsecureRepositories "true";' >> /etc/apt/apt.conf.d/99allow-insecure
-          
-          # Update without strict repository checking
-          apt-get update --allow-insecure-repositories || true
-          
-          # Create the udev rules directory
-          mkdir -p /etc/udev/rules.d/
-          
-          # Download Teensy rules and verify it worked
-          wget -O /etc/udev/rules.d/49-teensy.rules https://www.pjrc.com/teensy/00-teensy.rules
-          ls -la /etc/udev/rules.d/
-          cat /etc/udev/rules.d/49-teensy.rules | head -5
-          
-          # Try to reload udev rules if possible
-          udevadm control --reload-rules || true
-          udevadm trigger || true
-        shell: bash
       
       - name: Upload to Teensy
         run: pio run -t upload
       
       - name: Monitor Serial Output
         run: |
-          timeout 5s cat /dev/ttyACM0 || true
+          timeout 5s cat /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00 || true
