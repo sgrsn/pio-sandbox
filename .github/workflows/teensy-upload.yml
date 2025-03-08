@@ -16,4 +16,11 @@ jobs:
       - name: Monitor Serial Output
         run: |
           sleep 5
-          timeout 5s cat /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00 || true
+          timeout 10s cat /dev/serial/by-id/usb-Teensyduino_USB_Serial_11419230-if00 > serial_output.log || true
+      
+      - name: Upload Serial Log as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: serial-log
+          path: serial_output.log
+          retention-days: 7
